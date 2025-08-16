@@ -74,7 +74,7 @@ describe("Dao", function () {
             await dao.createProposal(description, deadline);
             await dao.vote(0, true);
             await time.increase(2);
-            await dao.approveVote(0);
+            await dao.approveProposal(0);
             const getProposal = await dao.getProposal(0);
             expect(getProposal.isApproved).to.equal(true);
         });
@@ -84,7 +84,7 @@ describe("Dao", function () {
             const description = "Proposal to increase the budget for the project";
             const deadline = 60 * 60 * 24;
             await dao.createProposal(description, deadline);
-            await expect(dao.approveVote(0)).to.be.revertedWith("Voting is still open");
+            await expect(dao.approveProposal(0)).to.be.revertedWith("Voting is still open");
         });
     })
 });
