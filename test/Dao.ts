@@ -19,9 +19,12 @@ describe("Dao", function () {
 
     describe("CreateProposal", function () {
         it("Should create proposal", async function () {const { dao } = await loadFixture(deployDaoFixture);
-            const description "Proposal to increase the budget for the project";
-            const deadline
-            const newProposal = await dao.createProposal()
+            const description  = "Proposal to increase the budget for the project";
+            const deadline = time.increaseTo(20);
+            await dao.createProposal(description, deadline);
+            const getProposal = await dao.getProposal(0);
+            expect(getProposal.description).to.equal(description);
+
         });
 
 
