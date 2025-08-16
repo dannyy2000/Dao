@@ -5,8 +5,7 @@ import "./IDao.sol";
 
 contract Dao is IDao{
 
-    bytes32 public constant DAO_PROPOSAL_ROLE = keccak256("DAO_ADMIN");
-    bytes32 public constant DAO_VOTER_ROLE = keccak256("DAO_MEMBER");
+    mapping(address => bool) isAdmin;
     Proposal[] public failedProposals;
     Proposal[] public passedProposals;
 
@@ -23,12 +22,13 @@ contract Dao is IDao{
 
 
     modifier onlyAdmin() {
-        require(msg.sender == admin, "Only admin can call this function");
+        require(msg.sender == admin || isAdmin[msg.sender] == true, "Only admin can call this function");
         _;
     }
 
     constructor() {
         admin = msg.sender;
+        isAdmin[admin] = true;
     }
 
 
@@ -100,6 +100,10 @@ contract Dao is IDao{
 
     function getProposal(uint256 proposalId) external view returns (Proposal memory){
         return proposals[proposalId];
+    }
+
+    function addAdmin(address admin) external onlyAdmin {
+        isAdmin[admin] = true;
     }
 
 
