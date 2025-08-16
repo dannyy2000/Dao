@@ -41,7 +41,7 @@ contract Dao is IDao{
             newProposal.description = _description;
             newProposal.yesVotes = 0;
             newProposal.noVotes = 0;
-            newProposal.deadline = deadline;
+            newProposal.deadline = block.timestamp + deadline;
             newProposal.status = Status.PENDING;
 
 

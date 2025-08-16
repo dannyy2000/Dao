@@ -19,8 +19,9 @@ describe("Dao", function () {
 
     describe("CreateProposal", function () {
         it("Should create proposal", async function () {const { dao } = await loadFixture(deployDaoFixture);
-
-            const newProposal = await
+            const description "Proposal to increase the budget for the project";
+            const deadline
+            const newProposal = await dao.createProposal()
         });
 
 
