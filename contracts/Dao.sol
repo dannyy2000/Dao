@@ -7,7 +7,6 @@ contract Dao is IDao{
 
     bytes32 public constant DAO_PROPOSAL_ROLE = keccak256("DAO_ADMIN");
     bytes32 public constant DAO_VOTER_ROLE = keccak256("DAO_MEMBER");
-//    bytes32 public constant DAO_EXECUTOR_ROLE = keccak256("DAO_EXECUTOR");
     Proposal[] public failedProposals;
     Proposal[] public passedProposals;
 
