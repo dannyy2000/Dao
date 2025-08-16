@@ -54,7 +54,7 @@ contract Dao is IDao{
         require(proposalId < uuid, "Proposal does not exist");
         require(!hasVoted[proposalId][msg.sender], "You have already voted on this proposal");
         require(proposals[proposalId].status == Status.PENDING, "Voting is closed for this proposal");
-        require(totalVotes == 3,"Only 3 votes are allowed per proposal");
+        require(block.timestamp < proposals[proposalId].deadline, "Voting deadline has passed");
 
         Proposal storage proposal = proposals[proposalId];
         hasVoted[proposalId][msg.sender] = true;
@@ -65,15 +65,18 @@ contract Dao is IDao{
             proposal.noVotes++;
         }
 
-        totalVotes++;
 
+        totalVotes++;
+        if(totalVotes == 3){
+            proposal.status = Status.CLOSED;
+        }
 
     }
 
     function approveProposal(uint256 proposalId) external onlyAdmin{
         require(proposalId < uuid, "Proposal does not exist");
-        require(proposals[proposalId].status == Status.PENDING, "Proposal is not pending");
-        require(approvalCount == 2, "Approval count must be 2 to pass the proposal");
+        require(proposals[proposalId].status == Status.CLOSED, "Proposal is not CLOSED");
+        require(approvalCount <= 2, "Approval count must be 2 to pass the proposal");
 
         Proposal storage proposal = proposals[proposalId];
 
@@ -86,7 +89,7 @@ contract Dao is IDao{
     function rejectProposal(uint256 proposalId) external onlyAdmin{
         require(proposalId < uuid, "Proposal does not exist");
         require(proposals[proposalId].status == Status.PENDING, "Proposal is not pending");
-        require(rejectionCount == 2, "Rejection count must be 2 to fail the proposal");
+        require(rejectionCount <= 2, "Rejection count must be 2 to fail the proposal");
 
         Proposal storage proposal = proposals[proposalId];
 

@@ -21,7 +21,8 @@ interface IDao{
     enum Status{
     PENDING,
     PASSED,
-    FAILED
+    FAILED,
+    CLOSED
 }
 
     function createProposal(string calldata _description, uint256 deadline) external;
