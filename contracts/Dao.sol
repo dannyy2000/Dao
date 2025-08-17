@@ -78,11 +78,13 @@ contract Dao is IDao{
         require(approvalCount <= 2, "Approval count must be 2 to pass the proposal");
 
         Proposal storage proposal = proposals[proposalId];
-
-
-        proposal.status = Status.PASSED;
         passedProposals.push(proposal);
         approvalCount++;
+        if( proposal.yesVotes > proposal.noVotes && approvalCount == 2) {
+            proposal.status = Status.PASSED;
+        } else {
+            proposal.status = Status.CLOSED;
+        }
     }
 
     function rejectProposal(uint256 proposalId) external onlyAdmin{
@@ -92,9 +94,13 @@ contract Dao is IDao{
 
         Proposal storage proposal = proposals[proposalId];
 
-        proposal.status = Status.FAILED;
         failedProposals.push(proposal);
         rejectionCount++;
+        if (proposal.noVotes > proposal.yesVotes && rejectionCount == 2) {
+            proposal.status = Status.FAILED;
+        } else {
+            proposal.status = Status.CLOSED;
+        }
     }
 
 

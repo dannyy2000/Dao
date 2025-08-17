@@ -56,11 +56,14 @@ describe("Dao", function () {
             const {dao,owner,otherAccount,secondAccount} = await loadFixture(deployDaoFixture);
             const description = "Proposal to increase the budget for the project";
             const deadline = 60 * 60 * 24;
+            await dao.addAdmin(otherAccount.address);
+            await dao.addAdmin(secondAccount.address);
             await dao.createProposal(description, deadline);
+            await time.increase(2);
+            await dao.vote(0, true);
             await dao.connect(otherAccount).vote(0, true);
             await dao.connect(secondAccount).vote(0, true);
-            await dao.connect(owner).vote(0, true);
-            await time.increase(2);
+
 
             await expect(dao.vote(0, true)).to.be.revertedWith("Voting is closed for this proposal");
         })
