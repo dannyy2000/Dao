@@ -108,8 +108,8 @@ contract Dao is IDao{
         return proposals[proposalId];
     }
 
-    function addAdmin(address admin) external onlyAdmin {
-        isAdmin[admin] = true;
+    function addAdmin(address _admin) external onlyAdmin {
+        isAdmin[_admin] = true;
     }
 
 
